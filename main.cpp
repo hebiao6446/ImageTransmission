@@ -7,10 +7,62 @@
 #include <opencv2/imgproc.hpp>
 
 
+#include "x264/stdint.h"
+#include "x264/config.h"
+#import "x264/config.h"
+#import "x264/x264.h"
+#include "x264_encoder.h"
+
+
 using namespace cv;
 
 
 int main() {
+
+
+    CvCapture *capture = cvCreateCameraCapture(0);
+    IplImage *frame;
+
+
+//    cap.set(CV_CAP_PROP_FRAME_WIDTH, 640);
+//    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
+
+    int bufsize;
+    x264Encoder x264;
+
+    x264.Create(640, 480, 3, 25);
+
+    uint8_t* buf;
+    while (1){
+        frame = cvQueryFrame(capture);
+
+        Mat mat_img=cvarrToMat(frame);
+
+
+
+
+        if (!mat_img.empty()){
+            bufsize = x264.EncodeOneFrame(mat_img);
+            if (bufsize > 0){
+                buf = x264.GetEncodedFrame();
+                printf("%d \n",strlen((char *)buf));
+            }
+        }
+
+
+
+        if(waitKey(33) == 27) break;
+    }
+
+    cvReleaseCapture(&capture);
+    cvDestroyWindow("hebiao");
+
+    return 1;
+}
+
+
+
+void camera_show(){
 
 
     CvCapture *capture = cvCreateCameraCapture(0);
@@ -48,37 +100,7 @@ int main() {
 
     cvReleaseCapture(&capture);
     cvDestroyWindow("hebiao");
-
-    return 1;
 }
 
 
-
-
-
-void openCamare(){
-
-    VideoCapture capture(0);//如果是笔记本，0打开的是自带的摄像头，1 打开外接的相机
-    double rate = 25.0;//视频的帧率
-    Size videoSize(1280,960);
-    VideoWriter writer("VideoTest.avi", CV_FOURCC('M', 'J', 'P', 'G'), rate, videoSize,1);
-    Mat frame,yuv_frame;
-
-
-
-    while (capture.isOpened())
-    {
-
-        capture.read(frame);
-//        cvtColor(frame,yuv_frame,CV_RGB2YUV_I420);
-
-        imshow("video", frame);
-
-
-    }
-
-
-
-
-}
 
