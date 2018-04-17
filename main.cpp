@@ -27,12 +27,16 @@ int main() {
 //    cap.set(CV_CAP_PROP_FRAME_WIDTH, 640);
 //    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
 
+    int frameH    = (int) cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT);
+    int frameW    = (int) cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH);
+
+
     int bufsize;
     x264Encoder x264;
-
-    x264.Create(640, 480, 3, 25);
-
     uint8_t* buf;
+    x264.Create(frameW, frameH, 3, 25);
+
+
     while (1){
         frame = cvQueryFrame(capture);
 
@@ -40,18 +44,24 @@ int main() {
 
 
 
-
         if (!mat_img.empty()){
             bufsize = x264.EncodeOneFrame(mat_img);
+
+
             if (bufsize > 0){
                 buf = x264.GetEncodedFrame();
-                printf("%d \n",strlen((char *)buf));
+                printf("%s \n",(char *)buf);
             }
+
+
         }
 
 
 
-        if(waitKey(33) == 27) break;
+//        if(waitKey(25) == 27) break;
+        if (mat_img.empty()){
+            break;
+        }
     }
 
     cvReleaseCapture(&capture);
@@ -59,6 +69,8 @@ int main() {
 
     return 1;
 }
+
+
 
 
 
@@ -75,6 +87,17 @@ void camera_show(){
     int yuv_bufLen = frameW*frameH*3/2;
     unsigned char* pYuvBuf = new unsigned char[yuv_bufLen];
 
+
+    int bufsize;
+    x264Encoder x264;
+
+    x264.Create(frameW, frameH, 3, 25);
+
+
+    uint8_t* buf;
+
+
+
     while (1){
         frame = cvQueryFrame(capture);
 
@@ -89,6 +112,18 @@ void camera_show(){
 
         IplImage yuv_frame = IplImage(yuvImg);
         cvShowImage("hebiao", &yuv_frame);
+
+
+
+
+        if (!mat_img.empty()){
+            bufsize = x264.EncodeOneFrame(mat_img);
+            if (bufsize > 0){
+                buf = x264.GetEncodedFrame();
+                printf("%s \n",(char *)buf);
+            }
+        }
+
 
 
 

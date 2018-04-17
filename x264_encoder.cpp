@@ -160,12 +160,26 @@ int x264Encoder::EncodeOneFrame(const cv::Mat& frame)
     m_encoder->pic_in.i_pts = m_encoder->iframe ++;
 
     m_encoder->iframe_size = x264_encoder_encode(m_encoder->h, &m_encoder->nal, &m_encoder->inal, &m_encoder->pic_in, &m_encoder->pic_out);
-    printf("%d \n",m_encoder->iframe_size);
+
+    FILE* outfile = fopen("/Users/apple/Desktop/abc/out.h264","ab");
+
+    if(m_encoder->iframe_size >0)
+    {
+
+        for (int i = 0; i < m_encoder->inal; ++i)
+        {
+            fwrite(m_encoder->nal[i].p_payload, 1, m_encoder->nal[i].i_payload, outfile);
+        }
+    }
+
+
+
     return m_encoder->iframe_size;
 }
 
 uchar* x264Encoder::GetEncodedFrame() const
 {
+
     return m_encoder->nal->p_payload;
 }
 
