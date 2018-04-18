@@ -50,7 +50,7 @@ int main() {
 
             if (bufsize > 0){
                 buf = x264.GetEncodedFrame();
-                printf("%s \n",(char *)buf);
+//                printf("%s \n",(char *)buf);
             }
 
 

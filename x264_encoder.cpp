@@ -172,8 +172,6 @@ int x264Encoder::EncodeOneFrame(const cv::Mat& frame)
         }
     }
 
-
-
     return m_encoder->iframe_size;
 }
 
