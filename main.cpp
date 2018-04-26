@@ -92,7 +92,22 @@ int main() {
 
 
 
+    client c_;
 
+    while (1){
+
+        if (recvfrom(s, buf, BUFLEN, 0, (struct sockaddr*)(&si_other), &slen)!=-1){
+
+            printf("Received packet from %s:%d\n", inet_ntoa(si_other.sin_addr), ntohs(si_other.sin_port));
+            c_.host = si_other.sin_addr.s_addr;
+            c_.port = si_other.sin_port;
+            
+
+            break;
+        }
+
+
+    }
 
 
 
@@ -124,6 +139,8 @@ int main() {
 
 
 
+
+        /*
         if (recvfrom(s, buf, BUFLEN, 0, (struct sockaddr*)(&si_other), &slen)==-1)
             diep("recvfrom");
 
@@ -145,9 +162,32 @@ int main() {
         }
         printf("Now we have %d clients\n", n);
 
-        if(waitKey(25) == 27) break;
+
+       */
 
 
+
+
+
+
+            si_other.sin_addr.s_addr = c_.host;
+            si_other.sin_port = c_.port;
+
+            printf("Sending to %s:%d\n", inet_ntoa(si_other.sin_addr), ntohs(si_other.sin_port));
+
+           char  *msg = "这是一段代码测试，看看字符串中文行不行";
+           size_t lenth =  strlen(msg);
+           if (sendto(s, msg, lenth, 0, (struct sockaddr*)(&si_other), slen)==-1)
+                    diep("sendto");
+
+
+
+
+
+//        if(waitKey(25) == 27) break;
+
+
+        if(waitKey(250) == 27) break;
     }
 
 
