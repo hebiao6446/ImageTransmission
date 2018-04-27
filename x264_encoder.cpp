@@ -161,8 +161,8 @@ int x264Encoder::EncodeOneFrame(const cv::Mat& frame)
 
     m_encoder->iframe_size = x264_encoder_encode(m_encoder->h, &m_encoder->nal, &m_encoder->inal, &m_encoder->pic_in, &m_encoder->pic_out);
 
+    /*
     FILE* outfile = fopen("/Users/apple/Desktop/abc/out.h264","ab");
-
     if(m_encoder->iframe_size >0)
     {
 
@@ -171,6 +171,8 @@ int x264Encoder::EncodeOneFrame(const cv::Mat& frame)
             fwrite(m_encoder->nal[i].p_payload, 1, m_encoder->nal[i].i_payload, outfile);
         }
     }
+    */
+
 
     return m_encoder->iframe_size;
 }
