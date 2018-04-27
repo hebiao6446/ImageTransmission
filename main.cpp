@@ -99,6 +99,9 @@ int main() {
     int frameW    = (int) cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH);
 
 
+
+    printf("%d,%d",frameW,frameH);
+
     int yuv_bufLen = frameW*frameH*3/2;
     unsigned char* pYuvBuf = new unsigned char[yuv_bufLen];
 
@@ -179,7 +182,7 @@ int main() {
 
 //    int  send_max_data_length =  9216;
 
-    int  send_max_data_length =  1000;
+    int  send_max_data_length =  500;
     while (1){
         frame = cvQueryFrame(capture);
         Mat mat_img=cvarrToMat(frame);
@@ -193,6 +196,8 @@ int main() {
 
 
         si_other.sin_addr.s_addr = c_.host;
+
+
         si_other.sin_port = c_.port;
 
         printf("Sending to %s:%d\n", inet_ntoa(si_other.sin_addr), ntohs(si_other.sin_port));
@@ -318,7 +323,7 @@ int main() {
 //        if(waitKey(25) == 27) break;
 
 
-        if(waitKey(250) == 27) break;
+        if(waitKey(1000) == 27) break;
     }
 
 
